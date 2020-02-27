@@ -30,10 +30,6 @@ class MediaInfoCommandRunnerTest extends TestCase
         $process = $this->prophesize(Process::class);
 
         $process
-            ->setCommandLine(Argument::type('string'))
-            ->shouldBeCalled();
-
-        $process
             ->setEnv(Argument::type('array'))
             ->shouldBeCalled();
 
@@ -59,7 +55,7 @@ class MediaInfoCommandRunnerTest extends TestCase
             $process->reveal()
         );
 
-        $this->assertEquals(file_get_contents($this->outputPath), $mediaInfoCommandRunner->run());
+        $this->assertStringEqualsFile($this->outputPath, $mediaInfoCommandRunner->run());
     }
 
     public function testRunException()
@@ -67,10 +63,6 @@ class MediaInfoCommandRunnerTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         $process = $this->prophesize(Process::class);
-
-        $process
-            ->setCommandLine(Argument::type('string'))
-            ->shouldBeCalled();
 
         $process
             ->setEnv(Argument::type('array'))
@@ -104,10 +96,6 @@ class MediaInfoCommandRunnerTest extends TestCase
     public function testRunAsync()
     {
         $process = $this->prophesize(Process::class);
-
-        $process
-            ->setCommandLine(Argument::type('string'))
-            ->shouldBeCalled();
 
         $process
             ->setEnv(Argument::type('array'))
