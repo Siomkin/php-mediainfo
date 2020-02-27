@@ -41,7 +41,7 @@ class MediaInfoCommandRunner
         $command = null,
         array $arguments = null,
         Process $process = null,
-        $forceOldXmlOutput = false
+        $forceOldXmlOutput = true
     ) {
         $this->filePath = $filePath;
         if ($command !== null) {
@@ -71,18 +71,18 @@ class MediaInfoCommandRunner
         $i = 0;
         foreach ($args as $value) {
             $var = 'MEDIAINFO_VAR_'.$i++;
-            $finalCommand[] = '"$'.$var.'"';
+            $finalCommand[] = '"${:'.$var.'}"';
             $env[$var] = $value;
         }
 
-        $finalCommandString = implode(' ', $finalCommand);
-
         if (null !== $process) {
-            $process->setCommandLine($finalCommandString);
+            //@deprecated since Symfony 4.2.
+            //@removed in Symfony 5.0.
+            //$process->setCommandLine($finalCommandString);
             $process->setEnv($env);
             $this->process = $process;
         } else {
-            $this->process = new Process($finalCommandString, null, $env);
+            $this->process = new Process($finalCommand, null, $env);
         }
     }
 
